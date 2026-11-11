@@ -501,7 +501,7 @@ html:not([lang="ko"]) .station { font-size: clamp(30px, 3.4vw, 58px); letter-spa
 }
 @media (max-width: 720px) {
   .ops .ov-head { grid-template-columns: minmax(0, 1fr); margin: 26px 0 20px; }
-  .ops .ov-head .ask { font-size: clamp(27px, 8.2vw, 44px); }   /* 좁은 화면에서 둘째 줄 끝 「칸」이 혼자 내려가지 않게 */
+  .ops .ov-head .ask { font-size: clamp(22px, 7.6vw, 44px); }   /* 좁은 화면에서 둘째 줄 끝 「칸」이 혼자 내려가지 않게(양옆 여백 28px 를 뺀 폭에 둘째 줄이 들어가는 크기) */
   .ops .ov-nums { gap: 24px; }
   .ops .ov-r { grid-template-columns: minmax(0, 1fr) 90px 46px; gap: 0 10px; }
   .ops .ov-r .ov-trk { grid-column: 1 / -1; grid-row: 2; min-height: 26px; margin-bottom: 6px; }

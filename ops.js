@@ -46,11 +46,13 @@
     parkPaths(s).forEach(function (p) {
       var w = p.w, canAround = w.aroundParkM != null && w.aroundParkM <= G.rules.aroundInsideMax;   // 카드와 같은 기준: 공원 안 구간이 짧을 때만 돌아가는 길 인정
       if (endMin(s) + w.min > lim) out.push({ st: p.st, kind: "fold" });
-      else if (s.durSrc === "assumed" && toMin(s.start) + G.rules.endLate + w.min > lim) out.push({ st: p.st, kind: canAround ? "cond" : "fold" });
+      else if (s.durSrc === "assumed" && toMin(s.start) + G.rules.endLate + w.min > lim) out.push({ st: p.st, kind: canAround ? "cond" : "fold", onlyLate: true });
     });
     return out;
   }
   function parkText(s) { return parkStates(s).map(function (p) { return p.st + (p.kind === "fold" ? " 칸 접음" : " 돌아가는 길로 셈"); }).join(" · "); }
+  // 회차 띠의 주황 꼬리표: 무슨 일인지(22시 넘김 / 늦게 끝날 때만 넘김)와 카드가 하는 일(칸 접음 / 돌아가는 길로 셈)
+  function parkTag(s) { return parkStates(s).map(function (p) { return (p.onlyLate ? "늦으면 22시 넘김 · " : "22시 넘김 · ") + p.st + (p.kind === "fold" ? " 칸 접음" : " 돌아가는 길로 셈"); }).join(" / "); }
   function td(tr, text, cls) { var c = el("td", cls, text); tr.appendChild(c); return c; }
 
   // 회차마다 한 번 계산: 끝(end) · 늦게 끝나는 경우(late, 길이 가정일 때만 더 늦음) · 22시 조건(park) · 공원 안쪽 길 가운데 가장 긴 걷는 시간(walk)
@@ -71,7 +73,7 @@
   function renderNums(M) {
     var box = $("o-nums"), C = cards(M); box.textContent = "";
     var a = C.filter(function (m) { return m.assumed; }).length, p = C.filter(function (m) { return m.park.length; }).length;
-    [[C.length, "회차", false], [a, "끝나는 때 가정", a > 0], [p, "22시 조건", p > 0]].forEach(function (x) {
+    [[C.length, "회차", false], [a, "공연종료 자료 없음", a > 0], [p, "22시 공원길 막힘", p > 0]].forEach(function (x) {
       var d = el("div", "ov-num" + (x[2] ? " hot" : "")); d.appendChild(el("b", null, String(x[0]))); d.appendChild(el("span", null, x[1])); box.appendChild(d);
     });
   }
@@ -85,24 +87,31 @@
     days.forEach(function (d) {
       var col = el("div", "ov-day" + (prev && Date.parse(d) - Date.parse(prev) > 86400000 ? " gap" : "")), st = el("div", "ov-stack");
       by[d].slice().sort(function (a, b) { return toMin(a.s.start) - toMin(b.s.start); }).forEach(function (m) {
-        var q = el("i", sqClass(m)); q.title = label(m.s) + " · " + m.s.venue + (m.assumed ? " · 끝나는 때 가정" : "") + (m.park.length ? " · 22시 조건" : ""); st.appendChild(q);
+        var q = el("i", sqClass(m)); q.title = label(m.s) + " · " + m.s.venue + (m.assumed ? " · 공연종료 자료 없음" : "") + (m.park.length ? " · 22시 공원길 막힘" : ""); st.appendChild(q);
       });
       col.appendChild(st); col.appendChild(el("b", null, String(+d.slice(8, 10)))); col.appendChild(el("span", null, DOW[by[d][0].s.dow] || ""));
       box.appendChild(col); prev = d;
     });
-    box.setAttribute("aria-label", "날짜별 회차 네모. 회차 " + C.length + ", 끝나는 때 가정 " + C.filter(function (m) { return m.assumed; }).length + ", 22시 조건 " + C.filter(function (m) { return m.park.length; }).length);
+    box.setAttribute("aria-label", "날짜별 회차 네모. 회차 " + C.length + ", 공연종료 자료 없음 " + C.filter(function (m) { return m.assumed; }).length + ", 22시 공원길 막힘 " + C.filter(function (m) { return m.park.length; }).length);
     $("o-cap").textContent = days.length ? days[0].slice(0, 4) + "." + days[0].slice(5, 7) + " · 네모 하나 = 회차 하나" : "";
   }
 
   // 01 회차 띠: 공연별로 묶고, 시각 축 하나에 회차마다 한 줄. 걷는 선이 22시 선을 넘는 줄 = 22시 조건(parkStates 와 같은 식).
+  // 범례 둘(맨 위 날짜 네모 · 01 회차 띠). 낱말은 사용자 지정(2026-11-11): 「공연종료 자료 있음」 = 주최 자료나 기획사 입력에 끝나는 때가 있음, 「자료 없음 · 가정 추정치」 = 어디에도 없어 가운데 값으로 추정, 「22시 공원길 막힘」 = 옛 이름 22시 조건.
+  function hours(min) { return min % 60 ? min + "분" : min / 60 + "시간"; }
   function renderLegend() {
-    var box = $("o-lgd"); box.textContent = "";
+    var box;
     function it(cls, text) { var s = el("span"); s.appendChild(el("i", "ov-m " + cls)); s.appendChild(document.createTextNode(text)); box.appendChild(s); }
-    it("ok", "끝나는 때 자료 있음");
-    it("as", "가정 " + SH.assume.dur + "분(대관정보 중앙값)");
-    it("ext", "늦으면 " + G.rules.endLate + "분");
+    box = $("o-lgd0"); box.textContent = "";
+    it("ok", "공연종료 자료 있음");
+    it("as", "자료 없음 · 가정 추정치");
+    it("p22", "22시 공원길 막힘");
+    box = $("o-lgd"); box.textContent = "";
+    it("ok", "공연종료 자료 있음");
+    it("as", "자료 없음 · 가정 추정치(시작 " + hours(SH.assume.dur) + " 뒤, 대관정보 가운데 값)");
+    it("ext", "늦으면 " + hours(G.rules.endLate) + " 뒤");
     it("walk", "공원 안쪽 길로 역까지 걷는 시간");
-    it("lim", G.rules.parkEntryUntil + " 공원 안쪽 출입 금지 · 걷는 선이 넘으면 22시 조건");
+    it("lim", G.rules.parkEntryUntil + " 공원 안쪽 출입 금지 · 걷는 선이 넘으면 22시 공원길 막힘");
     it("five", "다섯 칸 = " + FIELDS.map(function (f) { return FNAME[f]; }).join("·") + " · 누르면 입력");
   }
   function pick(id) {
@@ -136,9 +145,9 @@
           var s = m.s, st = toMin(s.start), r = el("div", "ov-r" + (m.assumed ? " as" : "") + (m.park.length ? " p22" : "")), w = el("span", "ov-when"), trk = el("div", "ov-trk");
           r.id = "r-" + m.id;
           w.appendChild(el("b", null, day(s))); w.appendChild(document.createTextNode(" " + s.start + " ~ "));
-          w.appendChild(m.assumed ? el("em", null, "가정") : document.createTextNode(clock(m.end)));
+          w.appendChild(m.assumed ? el("em", null, "추정") : document.createTextNode(clock(m.end)));
           if (!listed(s)) w.appendChild(el("i", "ov-tag", "주최 공지 기준"));
-          if (m.park.length) w.appendChild(el("i", "ov-tag hot", "22시 · " + parkText(s)));
+          if (m.park.length) w.appendChild(el("i", "ov-tag hot", parkTag(s)));
           r.appendChild(w);
 
           function seg(cls, a, b) { var i = el("i", cls); i.style.left = pc(a) + "%"; i.style.width = Math.max(0, pc(b) - pc(a)) + "%"; trk.appendChild(i); }
@@ -146,7 +155,7 @@
           if (m.late > m.end) seg("ov-ext", m.end, m.late);
           if (m.walk) seg("ov-walk" + (m.late + m.walk.min > lim ? " x" : ""), m.late, m.late + m.walk.min);
           var ln = el("i", "ov-lim"); ln.style.left = pc(lim) + "%"; trk.appendChild(ln);
-          var tip = s.start + " 시작 · " + (m.assumed ? "끝 " + clock(m.end) + "~" + clock(m.late) + " 가정" : "끝 " + clock(m.end) + " · " + SRC[s.durSrc]) + (m.walk ? " · " + m.walk.st + "까지 " + m.walk.min + "분" : "");
+          var tip = s.start + " 시작 · " + (m.assumed ? "공연종료 자료 없음 · 추정 " + clock(m.end) + "~" + clock(m.late) : "끝 " + clock(m.end) + " · " + SRC[s.durSrc]) + (m.walk ? " · " + m.walk.st + "까지 " + m.walk.min + "분" : "");
           trk.title = tip; trk.setAttribute("role", "img"); trk.setAttribute("aria-label", tip); trk.setAttribute("data-viz", "");
           r.appendChild(trk);
 
@@ -156,7 +165,7 @@
             if (on) filled++;
             five.appendChild(el("i", i === 0 && m.assumed ? "need" : on ? "on" : ""));
           });
-          five.setAttribute("aria-label", label(s) + " 다섯 칸 입력 열기 · 값 있음 " + filled + "칸" + (m.assumed ? " · 끝나는 때 가정" : ""));
+          five.setAttribute("aria-label", label(s) + " 다섯 칸 입력 열기 · 값 있음 " + filled + "칸" + (m.assumed ? " · 공연종료 자료 없음" : ""));
           five.onclick = function () { pick(m.id); };
           r.appendChild(five);
           var a = el("a", "lnk", "카드 →"); a.href = "index.html#/ko/" + m.id; r.appendChild(a);
@@ -175,7 +184,7 @@
   // 접어 둔 표: 고치기 전 판의 열 그대로
   function renderShows(M) {
     var tb = $("o-shows"); tb.textContent = "";
-    var head = el("tr"); ["회차", "공연장", "공연", "공연 길이 · 출처", "끝나는 때", "시각표", "22시 조건", "영문 공식 제목", "3D 안내", "카드"].forEach(function (h) { head.appendChild(el("th", null, h)); });
+    var head = el("tr"); ["회차", "공연장", "공연", "공연 길이 · 출처", "끝나는 때", "시각표", "22시 공원길", "영문 공식 제목", "3D 안내", "카드"].forEach(function (h) { head.appendChild(el("th", null, h)); });
     var thead = el("thead"); thead.appendChild(head); tb.appendChild(thead);
     var body = el("tbody"); tb.appendChild(body);
     M.forEach(function (m) {
@@ -259,11 +268,11 @@
     var C = cards(M), n = C.length, out = [];
     function add(o) { out.push(o); }
     var assumed = C.filter(function (m) { return m.assumed; });
-    add({ state: assumed.length ? "warn" : "ok", hot: assumed.length > 0, big: [assumed.length, n], title: "끝나는 때 가정", marks: C.map(function (m) { return m.assumed; }), note: assumed.length ? "끝나는 때 입력 시 해제" : "",
+    add({ state: assumed.length ? "warn" : "ok", hot: assumed.length > 0, big: [assumed.length, n], title: "공연종료 자료 없음", marks: C.map(function (m) { return m.assumed; }), note: assumed.length ? "가정 추정치(시작 " + hours(SH.assume.dur) + " 뒤) · 끝나는 때 입력 시 해제" : "",
       longTitle: "끝나는 때가 가정인 회차 " + assumed.length + " / " + n, long: assumed.length ? assumed.map(function (m) { return label(m.s); }).join(" · ") + " — 카드에 빗금과 「가정」 표시. 기획사가 끝나는 때를 알려 주면 해제" : "전 회차 공연 길이의 출처가 주최 자료 또는 기획사 입력" });
     var hit = C.filter(function (m) { return m.park.length; });
-    add({ state: hit.length ? "warn" : "ok", hot: hit.length > 0, big: [hit.length, n], title: "22시 조건", marks: C.map(function (m) { return m.park.length > 0; }), note: hit.length ? "끝나는 때 입력 시 재판정" : "",
-      longTitle: "22시 조건 해당 회차 " + hit.length + " / " + n, long: hit.length ? hit.map(function (m) { return label(m.s) + " " + parkText(m.s); }).join(" · ") + " — 주최 공원 이용 안내(22시 이후 공원 안쪽 출입 금지) 기준. 끝나는 때 입력 시 재판정" : "22시 이후 공원 안쪽 길을 지나게 되는 회차 없음" });
+    add({ state: hit.length ? "warn" : "ok", hot: hit.length > 0, big: [hit.length, n], title: "22시 공원길 막힘", marks: C.map(function (m) { return m.park.length > 0; }), note: hit.length ? "역까지 걷다 " + G.rules.parkEntryUntil + " 넘김 · 끝나는 때 입력 시 재판정" : "",
+      longTitle: "22시 공원길 막힘 회차 " + hit.length + " / " + n, long: hit.length ? hit.map(function (m) { return label(m.s) + " " + parkText(m.s); }).join(" · ") + " — 주최 공원 이용 안내(22시 이후 공원 안쪽 출입 금지) 기준. 끝나는 때 입력 시 재판정" : "22시 이후 공원 안쪽 길을 지나게 되는 회차 없음" });
     var en = C.filter(function (m) { return m.s.enTitle; });
     add({ state: en.length === n ? "ok" : "warn", big: [en.length, n], title: "영문 공식 제목 있음", marks: C.map(function (m) { return !!m.s.enTitle; }),
       longTitle: "영문 공식 제목이 파일에 있는 회차 " + en.length + " / " + n, long: "영문 공연정보(" + SH.enFile.id + ")의 마지막 공연일 " + SH.enFile.last + ". 없는 회차는 칸을 숨기고 주최 목록 제목 사용" });
