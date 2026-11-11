@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>동선 카드 — 공연 끝나고 집에 가는 길</title>
+<meta name="description" content="올림픽공원 공연이 끝난 뒤 어느 역에서 타면 좋은지, 마지막 열차가 몇 시인지 한 장으로 보여 주는 카드. 한국어 · English · 中文 · 日本語">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230B0B0B'/%3E%3Crect x='9' y='9' width='14' height='14' transform='rotate(45 16 16)' fill='%23FF4D12'/%3E%3C/svg%3E">
+<script src="theme.js?v=20261111x"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="route.css?v=20261111x">
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="#" id="brand"><span class="dot" aria-hidden="true"></span><span id="t-brand"></span><span class="sep" aria-hidden="true">/</span><span class="dim" id="t-tag"></span></a>
+  <div class="tools"><nav class="langs" id="langs" aria-label="Language"></nav><button type="button" class="theme" id="theme"><i aria-hidden="true"></i></button></div>
+</header>
+
+<main class="split">
+  <section class="paper" id="paper">
+    <div class="row" id="row-show">
+      <div class="idx"><b>01</b><span id="t-sec1"></span></div>
+      <div class="body">
+        <details class="pick" id="pick"><summary><span class="cur" id="cur"></span><span class="chg" id="chg"></span></summary><div class="chips" id="chips" role="group"></div></details>
+        <p class="showtitle" id="showtitle"></p>
+        <details class="ntag-more" id="noticetag" hidden><summary id="noticetag-s"></summary><p id="noticetag-p"></p></details>
+        <p class="showlinks" id="showlinks"></p>
+        <p class="orgnote" id="orgnote"></p>
+        <div class="tl" id="tl" aria-hidden="true"></div>
+        <p class="fine" id="arrline"></p>
+        <details class="more" id="m-end"><summary id="s-end"></summary><p id="tlnote"></p></details>
+        <details class="more" id="m-arrive"><summary id="s-arrive"></summary><p id="arrnote"></p></details>
+      </div>
+    </div>
+
+    <h1 class="ask" id="ask"></h1>
+    <p class="askhint" id="askhint"></p>
+
+    <div class="row">
+      <div class="idx"><b>02</b><span id="t-sec2"></span></div>
+      <div class="body"><div class="dests" id="dests"></div></div>
+    </div>
+
+    <p class="sr" id="live" aria-live="polite"></p>
+    <div class="answer" id="answer" hidden>
+      <div class="row">
+        <div class="idx"><b>03</b><span id="t-sec3"></span></div>
+        <div class="body">
+          <p class="endline" id="a-end"></p>
+          <div class="cols" id="a-cols" role="group"></div>
+          <p class="foldnote" id="a-fold"></p>
+          <p class="facts" id="a-facts"></p>
+          <p class="why" id="a-why"></p>
+          <p class="cond" id="a-cond" hidden></p>
+          <details class="more" id="m-why"><summary id="s-why"></summary><div id="a-note"></div></details>
+        </div>
+      </div>
+      <div class="row">
+        <div class="idx"><b>04</b><span id="t-sec4"></span></div>
+        <div class="body">
+          <p class="toask" id="a-toask"></p>
+          <div class="chips tos" id="a-tos" role="group"></div>
+          <div class="slab">
+            <div class="slab-top"><span id="a-daytype"></span><span id="a-basis"></span></div>
+            <div class="slab-label" id="a-biglabel"></div>
+            <button type="button" class="big flap" id="a-last"></button>
+            <div class="slab-dest" id="a-lastdest"></div>
+            <ul class="conn" id="a-conn"></ul>
+            <div class="bd-head" id="a-bdhead"></div>
+            <ul class="lasts" id="a-lasts"></ul>
+          </div>
+          <p class="fine" id="a-legend"></p>
+          <details class="more" id="m-conn"><summary id="s-conn"></summary><p id="a-transfer"></p></details>
+          <div class="acts">
+            <button type="button" class="btn" id="b-copy"></button>
+            <button type="button" class="btn" id="b-ics"></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <figure class="shot" id="shot">
+      <div class="shotbox" id="shotbox" role="button" tabindex="0" aria-pressed="false">
+        <pre id="ascii" aria-hidden="true"></pre>
+        <pre id="ascii2" aria-hidden="true"></pre>
+        <img id="shotreal" alt="">
+        <span class="shothint" id="shothint"></span>
+      </div>
+      <figcaption><span id="shotcap"></span><a class="lnk" id="shotcredit" target="_blank" rel="noopener"></a></figcaption>
+    </figure>
+
+    <div class="row" id="row-why">
+      <div class="idx"><b>05</b><span id="t-sec5"></span></div>
+      <div class="body">
+        <h2 class="claim" id="claim"></h2>
+        <p class="cmphead" id="cmphead"></p>
+        <div class="cmp" id="cmp"></div>
+        <p class="fine" id="cmpdiff"></p>
+        <details class="more" id="m-how"><summary id="s-how"></summary>
+          <div>
+            <div class="stats" id="stats"></div>
+            <p id="how"></p>
+            <div class="matrix" id="matrix" role="img"></div>
+            <p class="fine" id="cap"></p>
+            <div class="spk" id="spk">
+              <svg id="spikes" viewBox="0 0 940 250" role="img"></svg>
+              <div class="tip" id="tip" hidden></div>
+            </div>
+            <div class="legend" id="legend"></div>
+            <p class="fine" id="cap2"></p>
+            <details class="tbl"><summary id="tbl-sum"></summary><div class="tblwrap"><table id="tbl"></table></div></details>
+            <h3 class="mini" id="ord-title"></h3>
+            <div class="orders" id="orders"></div>
+            <div class="legend" id="ord-legend"></div>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <footer class="src">
+      <div class="idx"><b>—</b><span id="t-src"></span></div>
+      <details class="more" id="m-src"><summary id="s-src"></summary><ul id="srctext"></ul></details>
+    </footer>
+  </section>
+
+  <aside class="night" id="night">
+    <svg id="map" viewBox="0 42 1000 684" preserveAspectRatio="xMidYMin meet"></svg>
+    <div class="corner tl2" id="c-tl"></div>
+    <div class="corner tr2" id="c-tr"></div>
+    <div class="readout" id="readout">
+      <div class="ro-label" id="ro-label"></div>
+      <button type="button" class="ro-time flap" id="ro-time"></button>
+      <div class="ro-sub" id="ro-sub"></div>
+      <button type="button" class="ro-alt" id="ro-alt" hidden></button>
+    </div>
+    <div class="peek" id="peek" aria-hidden="true"></div>
+    <div class="ticker" aria-hidden="true"><div class="tk" id="tk"></div></div>
+  </aside>
+</main>
+
+<script src="data/guide.js?v=20261111x"></script>
+<script src="data/shows.js?v=20261111x"></script>
+<script src="data/trains.js?v=20261111x"></script>
+<script src="data/nights.js?v=20261111x"></script>
+<script src="data/facts.js?v=20261111x"></script>
+<script src="data/overrides.js?v=20261111x"></script>
+<script src="data/walk.js?v=20261111x"></script>
+<script src="app.js?v=20261111x"></script>
+</body>
+</html>

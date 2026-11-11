@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>동선 카드 — 운영 점검표</title>
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230B0B0B'/%3E%3Crect x='9' y='9' width='14' height='14' transform='rotate(45 16 16)' fill='%23FF4D12'/%3E%3C/svg%3E">
+<script src="theme.js?v=20261111x"></script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="route.css?v=20261111x">
+</head>
+<body class="ops">
+<header class="bar">
+  <a class="brand" href="index.html"><span class="dot" aria-hidden="true"></span><span>동선 카드</span><span class="sep" aria-hidden="true">/</span><span class="dim">운영 점검표</span></a>
+  <div class="tools"><nav class="langs"><a class="back" href="index.html">카드 보기 →</a></nav><button type="button" class="theme" id="theme" data-dark="어둡게 보기" data-light="밝게 보기"><i aria-hidden="true"></i></button></div>
+</header>
+
+<main class="opsmain">
+  <h1 class="ask">자동 기반 회차 운영시스템<br>사람이 고려해야 할 곳 다섯 칸</h1>
+
+  <div class="row">
+    <div class="idx"><b>01</b><span>회차</span></div>
+    <div class="body">
+      <p class="why">주최 공연정보와 대관정보에 따라 나열함</p>
+      <div class="tblwrap wide"><table id="o-shows"></table></div>
+      <p class="fine" id="o-note"></p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="idx"><b>02</b><span>기획사 다섯 칸</span></div>
+    <div class="body">
+      <p class="why">기획사 확인 시 입력. 빈 칸은 카드에 표시하지 않음</p>
+      <form class="oform" id="o-form">
+        <label class="full">회차<select id="f-show"></select></label>
+        <label>끝나는 때<input id="f-end" type="time"></label>
+        <label>외국인 확인 부스 위치<input id="f-booth" type="text" maxlength="80"></label>
+        <label>굿즈 대기 구역<input id="f-goods" type="text" maxlength="80"></label>
+        <label>퇴장 방식<input id="f-exitWay" type="text" maxlength="80"></label>
+        <label>셔틀<input id="f-shuttle" type="text" maxlength="80"></label>
+        <div class="acts full">
+          <button type="submit" class="btn">저장</button>
+          <button type="button" class="btn" id="f-clear">이 회차 입력 지우기</button>
+          <a class="btn" id="f-open" href="index.html">카드에서 보기 →</a>
+          <button type="button" class="btn" id="f-export">카드에 반영할 파일 받기</button>
+        </div>
+      </form>
+      <p class="fine" id="f-msg"></p>
+      <p class="fine">받은 파일을 data 폴더의 overrides.js 로 바꿔 넣으면 모든 관람객 카드에 반영</p>
+      <p class="fine">입력값은 이 브라우저에 저장 — 파일로 받아 게시하면 전체 반영. 끝나는 때 입력 시 시간 띠가 가정(빗금)에서 실선으로 바뀌고 22시 조건 재판정</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="idx"><b>03</b><span>점검표</span></div>
+    <div class="body"><ul class="ocheck" id="o-check"></ul></div>
+  </div>
+
+  <footer class="src">
+    <div class="idx"><b>—</b><span>자료</span></div>
+    <ul id="o-src"></ul>
+  </footer>
+</main>
+
+<script src="data/guide.js?v=20261111x"></script>
+<script src="data/shows.js?v=20261111x"></script>
+<script src="data/trains.js?v=20261111x"></script>
+<script src="data/overrides.js?v=20261111x"></script>
+<script src="data/walk.js?v=20261111x"></script>
+<script src="ops.js?v=20261111x"></script>
+</body>
+</html>
