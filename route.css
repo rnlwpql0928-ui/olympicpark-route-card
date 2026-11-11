@@ -410,7 +410,7 @@ html:not([lang="ko"]) .station { font-size: clamp(30px, 3.4vw, 58px); letter-spa
 .ops .ov-hero { border-top: 1px solid var(--ink); padding: 14px 0 22px; }
 .ops .ov-cap { margin: 0 0 12px; font: 600 11px/1.4 var(--mono); letter-spacing: .08em; color: var(--mute); }
 .ops .ov-strip { display: flex; align-items: flex-end; gap: 6px; }
-.ops .ov-day { display: grid; justify-items: center; gap: 7px; width: clamp(26px, 6.4vw, 44px); flex: none; }
+.ops .ov-day { display: grid; justify-items: center; gap: 7px; flex: 1 1 0; min-width: 0; max-width: 44px; }   /* 날짜 칸은 남는 폭을 나눠 갖고 44px 에서 멈춘다(320 폭에서도 안 넘치게) */
 .ops .ov-day.gap { margin-left: clamp(10px, 3vw, 30px); }
 .ops .ov-stack { display: flex; flex-direction: column-reverse; gap: 4px; width: 100%; }
 .ops .ov-sq { display: block; width: 100%; aspect-ratio: 1; background: var(--ink); }
@@ -502,7 +502,8 @@ html:not([lang="ko"]) .station { font-size: clamp(30px, 3.4vw, 58px); letter-spa
 @media (max-width: 720px) {
   .ops .ov-head { grid-template-columns: minmax(0, 1fr); margin: 26px 0 20px; }
   .ops .ov-head .ask { font-size: clamp(22px, 7.6vw, 44px); }   /* 좁은 화면에서 둘째 줄 끝 「칸」이 혼자 내려가지 않게(양옆 여백 28px 를 뺀 폭에 둘째 줄이 들어가는 크기) */
-  .ops .ov-nums { gap: 24px; }
+  .ops .ov-nums { display: grid; grid-template-columns: repeat(3, minmax(0, max-content)); gap: 0 22px; }   /* 이름이 길어 한 줄에 안 들어가면 칸이 줄고 이름이 낱말 단위로 줄바꿈된다(320 폭 넘침 막기) */
+  .ops .ov-num span { white-space: normal; word-break: keep-all; }
   .ops .ov-r { grid-template-columns: minmax(0, 1fr) 90px 46px; gap: 0 10px; }
   .ops .ov-r .ov-trk { grid-column: 1 / -1; grid-row: 2; min-height: 26px; margin-bottom: 6px; }
   .ops .ov-ax .ov-r > :not(.ov-trk) { display: none; }
