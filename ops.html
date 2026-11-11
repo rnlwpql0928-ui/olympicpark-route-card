@@ -6,10 +6,10 @@
 <title>동선 카드 — 운영 점검표</title>
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%230B0B0B'/%3E%3Crect x='9' y='9' width='14' height='14' transform='rotate(45 16 16)' fill='%23FF4D12'/%3E%3C/svg%3E">
-<script src="theme.js?v=20261111x"></script>
+<script src="theme.js?v=20261111y"></script>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-<link rel="stylesheet" href="route.css?v=20261111x">
+<link rel="stylesheet" href="route.css?v=20261111y">
 </head>
 <body class="ops">
 <header class="bar">
@@ -18,14 +18,27 @@
 </header>
 
 <main class="opsmain">
-  <h1 class="ask">자동 기반 회차 운영시스템<br>사람이 고려해야 할 곳 다섯 칸</h1>
+  <div class="ov-head">
+    <h1 class="ask">자동 기반 회차 운영시스템<br>사람이 고려해야 할 곳 다섯 칸</h1>
+    <div class="ov-nums" id="o-nums"></div>
+  </div>
+  <div class="ov-hero">
+    <p class="ov-cap" id="o-cap"></p>
+    <div class="ov-strip" id="o-strip" role="img" data-viz></div>
+    <p class="ov-lgd"><span><i class="ov-m ok"></i>끝나는 때 자료 있음</span><span><i class="ov-m as"></i>가정</span><span><i class="ov-m p22"></i>22시 조건</span></p>
+  </div>
 
   <div class="row">
     <div class="idx"><b>01</b><span>회차</span></div>
     <div class="body">
       <p class="why">주최 공연정보와 대관정보에 따라 나열함</p>
-      <div class="tblwrap wide"><table id="o-shows"></table></div>
-      <p class="fine" id="o-note"></p>
+      <p class="ov-lgd" id="o-lgd"></p>
+      <div class="ov-tl" id="o-tl"></div>
+      <details class="ov-fold">
+        <summary id="o-shows-n">회차 표로 보기</summary>
+        <div class="tblwrap wide"><table id="o-shows"></table></div>
+        <p class="fine" id="o-note"></p>
+      </details>
     </div>
   </div>
 
@@ -55,7 +68,16 @@
 
   <div class="row">
     <div class="idx"><b>03</b><span>점검표</span></div>
-    <div class="body"><ul class="ocheck" id="o-check"></ul></div>
+    <div class="body">
+      <ul class="ov-ck" id="o-check"></ul>
+      <p class="ov-cap">역 출구 표기 · 출처별</p>
+      <div class="ov-ex" id="o-exits" data-viz></div>
+      <p class="ov-lgd"><span><i class="ov-m emp"></i>표기 없음</span><span><i class="ov-m ok"></i>같은 역인데 표기 다름</span></p>
+      <details class="ov-fold">
+        <summary id="o-check-n">점검 항목 글로 보기</summary>
+        <ul class="ocheck" id="o-check-full"></ul>
+      </details>
+    </div>
   </div>
 
   <footer class="src">
@@ -64,11 +86,11 @@
   </footer>
 </main>
 
-<script src="data/guide.js?v=20261111x"></script>
-<script src="data/shows.js?v=20261111x"></script>
-<script src="data/trains.js?v=20261111x"></script>
-<script src="data/overrides.js?v=20261111x"></script>
-<script src="data/walk.js?v=20261111x"></script>
-<script src="ops.js?v=20261111x"></script>
+<script src="data/guide.js?v=20261111y"></script>
+<script src="data/shows.js?v=20261111y"></script>
+<script src="data/trains.js?v=20261111y"></script>
+<script src="data/overrides.js?v=20261111y"></script>
+<script src="data/walk.js?v=20261111y"></script>
+<script src="ops.js?v=20261111y"></script>
 </body>
 </html>
