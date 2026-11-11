@@ -19,7 +19,8 @@
 
 ## 사진
 
-- 공연 날 KSPO DOME 안: Moonhayun, CC BY-SA 4.0, Wikimedia Commons
+- 공연 날 KSPO DOME 안: Moonhayun, CC BY-SA 4.0, Wikimedia Commons (https://commons.wikimedia.org/wiki/File:%EC%98%AC%EB%A6%BC%ED%94%BD%EC%B2%B4%EC%A1%B0.jpg)
+- 바꾼 점: 크기를 줄이고 일부를 잘라 썼으며, 화면에서는 글자로 다시 그린 모습도 보여 줍니다. 화면의 사진 설명에도 같은 내용을 적었습니다.
 
 ## 알림
 
