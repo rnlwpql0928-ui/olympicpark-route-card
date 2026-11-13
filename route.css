@@ -587,3 +587,21 @@ html:not([lang="ko"]) .station { font-size: clamp(30px, 3.4vw, 58px); letter-spa
   .cmprow:nth-last-child(2) { margin-bottom: 10px; }
   .cmprow:nth-last-child(2) .ct u::after { content: attr(data-l); position: absolute; left: -1px; bottom: -15px; transform: translateX(-50%); font: 600 10px/1 var(--mono); color: var(--mute); white-space: nowrap; }
 }
+
+/* 휴대폰 첫 화면(2026-11-13 검수): 질문과 가는 곳 단추가 첫 화면에 오도록 순서만 바꾼다.
+   위에는 공연 고르기와 제목만 두고, 링크·시간 띠·오는 길 설명은 답 아래로 내린다. 내용과 PC 배치는 그대로다. */
+@media (max-width: 720px) {
+  .split { grid-template-columns: minmax(0, 1fr); }   /* 칸이 내용 폭만큼 넓어지지 않게(366행과 같은 까닭) */
+  .paper { display: flex; flex-direction: column; min-width: 0; }
+  .paper > * { order: 4; }
+  #row-show, #row-show > .body { display: contents; }
+  #row-show > .idx, #pick, #showtitle, #noticetag { order: 0; }
+  #row-show > .idx { margin-bottom: 10px; }
+  #pick { align-self: flex-start; }
+  .paper > *, #row-show > .body > * { min-width: 0; max-width: 100%; }   /* 세로 flex 칸은 기본 최소 폭이 내용 폭이라 긴 영어 줄이 화면 밖으로 밀린다 */
+  #ask, #askhint, .paper > .row:not([id]) { order: 1; }
+  #ask { margin: 22px 0 22px; }
+  #live, #answer { order: 2; }
+  #showlinks, #orgnote, #tl, #arrline, #arrfork, #m-end, #m-arrive { order: 3; }
+  #showlinks { margin-top: 26px; padding-top: 16px; border-top: 1px solid var(--rule); }
+}
