@@ -121,6 +121,7 @@ window.RC_GUIDE = {
       noticeTag: "주최 공지 기준", noticeWhy: "주최 공연 목록에는 아직 없고, 올림픽수영장의 주차혼잡안내 공지에 적힌 회차예요.", parking: "차로 왔다면 — 주최 실시간 주차 화면 보기",
       hostPage: "주최 공연장 안내", d3: "공연장 3D로 보기", map: "지도에서 보기", startAt: function (t) { return t + " 시작"; },
       tStart: "시작", tEnd: "끝", tEndEst: "끝(예상)", tLast: "마지막 열차", tIn: "오는 길 붐빔", est: "예상",
+      arrFork: function (x) { return "올 때 " + x.line + "은 " + x.N("마천") + "행만 " + x.St("올림픽공원") + "에 서요. 하남검단산·상일동행을 탔다면 " + x.St("강동") + "에서 " + x.N("마천") + "행으로 갈아타요."; },
       more: { end: "끝나는 시각은 어떻게 알아요?", arrive: "올 때는 언제 붐벼요?", why: "왜 이 역이에요?", conn: "갈아타는 시간도 넣었나요?", how: "숫자는 이렇게 셌어요", src: "자료 출처 보기" },
       dur: {
         rental: function (m) { return "공연 길이는 " + m + "분이에요. 주최 대관정보에 적힌 값이에요."; },
@@ -135,13 +136,13 @@ window.RC_GUIDE = {
       why: {
         jamsil: function (x) { return "{S:올림픽공원}을 지나지 않는 " + x.line + " 역이에요. " + x.St("잠실") + "까지 " + x.n + "정거장이에요."; },
         jamsilAlt: function (x) { return x.line9 + "으로 " + x.St("석촌") + "까지 " + x.n + "정거장 가서 " + x.line8 + "으로 갈아타요. " + x.St("잠실") + "까지 " + x.k + "정거장이에요."; },
-        city5: function (x) { return x.St("올림픽공원") + "보다 " + x.n + "정거장 빨리 서는 역이에요. 공연장에서 나온 사람들보다 먼저 타요."; },
+        city5: function (x) { return x.St("올림픽공원") + "보다 " + x.n + "정거장 빨리 서는 역이에요. 열차가 " + x.St("올림픽공원") + "에 닿기 전에 타요."; },
         macheon5: function (x) { return "주최가 안내하는 역이에요. " + x.N("마천") + " 방면 열차는 여기서 타요."; },
         gangnam9: function (x) { return "9호선은 여기서 타요. 다음 역인 " + x.St("한성백제") + "까지 걸어가도 같은 열차를 한 정거장 뒤에서 타게 돼요."; }
       },
       note: {
-        night: function (x) { return "공연 밤 " + x.hits + "일 평균으로 이 역은 평소와 거의 같았어요(평소의 " + x.m + "배)."; },
-        nightBusy: function (x) { return "공연 밤 " + x.hits + "일 평균으로 이 역은 평소의 " + x.m + "배가 탔어요. 많이 붐비는 역이에요."; },
+        night: function (x) { return "{S:올림픽공원} 승차가 평소의 2배 이상이던 밤 " + x.hits + "일 평균으로 이 역은 평소와 거의 같았어요(평소의 " + x.m + "배)."; },
+        nightBusy: function (x) { return "{S:올림픽공원} 승차가 평소의 2배 이상이던 밤 " + x.hits + "일 평균으로 이 역은 평소의 " + x.m + "배가 탔어요. 많이 붐비는 역이에요."; },
         near: function (x) { return "공연장 안내에 적힌 역은 " + x.St("올림픽공원") + "이에요. 같은 열차가 " + x.d + "분 뒤 그 역에 서요(" + x.t + ")."; },
         line9: function (x) { return x.date + " 22시대에 9호선을 탄 사람은 " + x.St("올림픽공원") + " " + x.a + "명, " + x.St("한성백제") + " " + x.b + "명이었어요."; },
         foot: "※ {HRS}에 탄 사람 수를 같은 요일 평소와 견준 값"
@@ -225,6 +226,7 @@ window.RC_GUIDE = {
       noticeTag: "From a host notice", noticeWhy: "Not on the host's show list yet — this date comes from the Olympic Swimming Pool's parking congestion notice.", parking: "Came by car? See the host's live parking screen",
       hostPage: "Host venue guide", d3: "See the venue in 3D", map: "Open in map", startAt: function (t) { return "starts " + t; },
       tStart: "Start", tEnd: "End", tEndEst: "End (est.)", tLast: "Last train", tIn: "Busy on the way in", est: "est.",
+      arrFork: function (x) { return "Coming by " + x.line + ": only trains bound for " + x.N("마천") + " stop at " + x.St("올림픽공원") + ". If you are on a Hanam Geomdansan or Sangil-dong train, change at " + x.St("강동") + " to a " + x.N("마천") + " train."; },
       more: { end: "How do you know when it ends?", arrive: "When does arrival get busy?", why: "Why this station?", conn: "Is transfer time included?", how: "How we counted", src: "See the sources" },
       dur: {
         rental: function (m) { return "The show runs " + m + " min — as listed in the host's rental data."; },
@@ -238,13 +240,13 @@ window.RC_GUIDE = {
       why: {
         jamsil: function (x) { return "A " + x.line + " station, on a line that doesn't run through {S:올림픽공원}. " + x.St("잠실") + " is " + x.n + (x.n > 1 ? " stops" : " stop") + " away."; },
         jamsilAlt: function (x) { return "Ride " + x.line9 + " " + x.n + (x.n > 1 ? " stops" : " stop") + " to " + x.St("석촌") + ", then change to " + x.line8 + ". " + x.St("잠실") + " is " + x.k + (x.k > 1 ? " stops" : " stop") + " from there."; },
-        city5: function (x) { return "Trains stop here " + x.n + (x.n > 1 ? " stops" : " stop") + " before " + x.St("올림픽공원") + ", so you board ahead of the crowd leaving the venue."; },
+        city5: function (x) { return "Trains stop here " + x.n + (x.n > 1 ? " stops" : " stop") + " before " + x.St("올림픽공원") + ", so you board before the train reaches " + x.St("올림픽공원") + "."; },
         macheon5: function (x) { return "This is the station the host points to. Trains toward " + x.N("마천") + " leave from here."; },
         gangnam9: function (x) { return "Line 9 boards here. If you walk to " + x.St("한성백제") + ", the next stop, you get on the same train one stop later."; }
       },
       note: {
-        night: function (x) { return "Averaged over " + x.hits + " show nights, this station stayed close to a normal night (" + x.m + "× its usual riders)."; },
-        nightBusy: function (x) { return "Averaged over " + x.hits + " show nights, this station carried " + x.m + "× its usual riders. It gets very busy."; },
+        night: function (x) { return "Averaged over the " + x.hits + " nights when {S:올림픽공원} carried at least twice its usual riders, this station stayed close to a normal night (" + x.m + "× its usual riders)."; },
+        nightBusy: function (x) { return "Averaged over the " + x.hits + " nights when {S:올림픽공원} carried at least twice its usual riders, this station carried " + x.m + "× its usual riders. It gets very busy."; },
         near: function (x) { return "The station in the venue guide is " + x.St("올림픽공원") + ". The same train stops there " + x.d + " min later (" + x.t + ")."; },
         line9: function (x) { return "On " + x.date + ", in the 22:00 hour, Line 9 boardings were " + x.a + " at " + x.St("올림픽공원") + " and " + x.b + " at " + x.St("한성백제") + "."; },
         foot: "※ Riders boarding {HRS}, compared with the usual for that weekday"
@@ -327,6 +329,7 @@ window.RC_GUIDE = {
       noticeTag: "依据主办方公告", noticeWhy: "主办方演出列表中暂未收录，此场次来自奥林匹克游泳馆的停车拥堵提示公告。", parking: "开车来的话 — 查看主办方实时停车画面",
       hostPage: "主办方场馆指南", d3: "3D看场馆", map: "在地图中查看", startAt: function (t) { return t + " 开演"; },
       tStart: "开演", tEnd: "结束", tEndEst: "结束(预计)", tLast: "末班车", tIn: "来时人多", est: "预计",
+      arrFork: function (x) { return "乘" + x.line + "前来时,只有开往" + x.N("마천") + "的列车停靠" + x.St("올림픽공원") + "。如果乘上了开往河南黔丹山或上一洞的列车,请在" + x.St("강동") + "换乘开往" + x.N("마천") + "的列车。"; },
       more: { end: "怎么知道几点结束?", arrive: "来的时候几点人多?", why: "为什么是这一站?", conn: "算上换乘时间了吗?", how: "数字是这样算的", src: "查看数据来源" },
       dur: {
         rental: function (m) { return "演出时长" + m + "分钟,来自主办方的场地租用数据。"; },
@@ -340,13 +343,13 @@ window.RC_GUIDE = {
       why: {
         jamsil: function (x) { return "这是" + x.line + "的车站,这条线不经过{S:올림픽공원}。到" + x.St("잠실") + "只有" + x.n + "站。"; },
         jamsilAlt: function (x) { return "乘" + x.line9 + "坐" + x.n + "站到" + x.St("석촌") + ",再换乘" + x.line8 + "。到" + x.St("잠실") + "只有" + x.k + "站。"; },
-        city5: function (x) { return "列车比" + x.St("올림픽공원") + "早" + x.n + "站停靠这里,您可以赶在散场观众之前上车。"; },
+        city5: function (x) { return "列车比" + x.St("올림픽공원") + "早" + x.n + "站停靠这里,您在列车到达" + x.St("올림픽공원") + "之前上车。"; },
         macheon5: function (x) { return "这是主办方指引的车站。" + x.N("마천") + "方向的列车在这里乘车。"; },
         gangnam9: function (x) { return "9号线在这里乘车。即使走到下一站" + x.St("한성백제") + ",乘的也是同一班列车,只是晚一站上车。"; }
       },
       note: {
-        night: function (x) { return x.hits + "个演出夜平均来看,这一站和平时差不多(平日的" + x.m + "倍)。"; },
-        nightBusy: function (x) { return x.hits + "个演出夜平均来看,这一站的乘车人数是平日的" + x.m + "倍,非常拥挤。"; },
+        night: function (x) { return "在{S:올림픽공원}乘车人数达到平日2倍以上的" + x.hits + "个夜晚,平均来看这一站和平时差不多(平日的" + x.m + "倍)。"; },
+        nightBusy: function (x) { return "在{S:올림픽공원}乘车人数达到平日2倍以上的" + x.hits + "个夜晚,平均来看这一站的乘车人数是平日的" + x.m + "倍,非常拥挤。"; },
         near: function (x) { return "场馆指南标注的车站是" + x.St("올림픽공원") + "。同一班列车" + x.d + "分钟后到该站(" + x.t + ")。"; },
         line9: function (x) { return x.date + " 22点时段乘9号线的人数:" + x.St("올림픽공원") + x.a + "人," + x.St("한성백제") + x.b + "人。"; },
         foot: "※ {HRS}的乘车人数与同一星期几平日相比的数值"
@@ -429,6 +432,7 @@ window.RC_GUIDE = {
       noticeTag: "主催者の告知による", noticeWhy: "主催者の公演一覧にはまだなく、オリンピック水泳場の駐車場混雑案内の告知に載っている回です。", parking: "車で来た方は — 主催者のリアルタイム駐車状況を見る",
       hostPage: "主催者の会場案内", d3: "会場を3Dで見る", map: "地図で見る", startAt: function (t) { return t + " 開演"; },
       tStart: "開演", tEnd: "終演", tEndEst: "終演(予想)", tLast: "終電", tIn: "行きの混雑", est: "予想",
+      arrFork: function (x) { return x.line + "で来るときは、" + x.N("마천") + "行きだけが" + x.St("올림픽공원") + "に停まります。ハナムコムダンサン行き・サンイルドン行きに乗った場合は、" + x.St("강동") + "で" + x.N("마천") + "行きに乗り換えてください。"; },
       more: { end: "終演時刻はどうやって分かる?", arrive: "行きは何時ごろ混む?", why: "なぜこの駅?", conn: "乗り換え時間も入っている?", how: "数字の数え方", src: "データ出典を見る" },
       dur: {
         rental: function (m) { return "公演時間は" + m + "分です。主催者の貸館データに書かれた値です。"; },
@@ -442,13 +446,13 @@ window.RC_GUIDE = {
       why: {
         jamsil: function (x) { return "{S:올림픽공원}を通らない" + x.line + "の駅です。" + x.St("잠실") + "まで" + x.n + "駅です。"; },
         jamsilAlt: function (x) { return x.line9 + "で" + x.n + "駅の" + x.St("석촌") + "まで行き、" + x.line8 + "に乗り換えます。" + x.St("잠실") + "まで" + x.k + "駅です。"; },
-        city5: function (x) { return x.St("올림픽공원") + "より" + x.n + "駅手前に停まる駅です。会場を出た人たちより先に乗れます。"; },
+        city5: function (x) { return x.St("올림픽공원") + "より" + x.n + "駅手前に停まる駅です。列車が" + x.St("올림픽공원") + "に着く前に乗れます。"; },
         macheon5: function (x) { return "主催者が案内している駅です。" + x.N("마천") + "方面の列車はここから乗ります。"; },
         gangnam9: function (x) { return "9号線はここから乗ります。次の" + x.St("한성백제") + "まで歩いても、同じ列車に1駅あとから乗ることになります。"; }
       },
       note: {
-        night: function (x) { return "公演の夜" + x.hits + "日の平均で、この駅はほぼふだん通りでした(ふだんの" + x.m + "倍)。"; },
-        nightBusy: function (x) { return "公演の夜" + x.hits + "日の平均で、この駅の乗車はふだんの" + x.m + "倍でした。とても混む駅です。"; },
+        night: function (x) { return "{S:올림픽공원}の乗車がふだんの2倍以上だった夜" + x.hits + "日の平均で、この駅はほぼふだん通りでした(ふだんの" + x.m + "倍)。"; },
+        nightBusy: function (x) { return "{S:올림픽공원}の乗車がふだんの2倍以上だった夜" + x.hits + "日の平均で、この駅の乗車はふだんの" + x.m + "倍でした。とても混む駅です。"; },
         near: function (x) { return "会場案内に書かれている駅は" + x.St("올림픽공원") + "です。同じ列車が" + x.d + "分後にその駅に停まります(" + x.t + ")。"; },
         line9: function (x) { return x.date + " 22時台に9号線に乗った人は、" + x.St("올림픽공원") + " " + x.a + "人、" + x.St("한성백제") + " " + x.b + "人でした。"; },
         foot: "※ {HRS}の乗車人数を同じ曜日のふだんと比べた値"

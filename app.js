@@ -337,6 +337,8 @@
     $("arrnote").textContent = drawn ? fill(t.arrive({ hour: H, days: bk.days, parts: parts })) : "";
     // 띠가 없으면 접는 설명 대신 바로 보이는 한 줄(기록이 적은 시작 시 / 붐빈 칸이 없는 시작 시)
     $("arrline").textContent = drawn ? "" : use ? t.arrFlat : t.arrFew;
+    // 5호선 갈림: 강동역 하행은 마천·하남검단산·상일동행으로 갈리고 올림픽공원역에는 마천행만 선다(서울교통공사 열차운행시각표 2026-09-01 판)
+    $("arrfork").textContent = t.arrFork({ N: N, St: St, line: t.line("5") });
   }
 
   // ---------- 그리기: 02 행선지 ----------
